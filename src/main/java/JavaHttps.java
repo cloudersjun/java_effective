@@ -31,8 +31,7 @@ public class JavaHttps
             String timestamp= DateFormatUtils.format(new Date(),"yyyyMMddHHmmss");
             System.out.println("appkey="+appKey+"&appsecret="+appSecret+"&param="+param.toJSONString()+"&timestamp="+timestamp);
             String sign= MD5("appkey="+appKey+"&appsecret="+appSecret+"&param="+param.toJSONString()+"&timestamp="+timestamp);
-            String httpsURL = "https://ad.99shiji" +
-                    ".com/ad/1/getADInfoByCodeId?appkey="+appKey+"&sign="+sign+"&param="+ URLEncoder.encode(param
+            String httpsURL = "host?appkey="+appKey+"&sign="+sign+"&param="+ URLEncoder.encode(param
                             .toJSONString(),"utf-8")+"&timestamp="+timestamp;
             System.out.println(httpsURL);
 //            URL myurl = new URL(httpsURL);
