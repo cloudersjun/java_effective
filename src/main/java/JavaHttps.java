@@ -28,11 +28,11 @@ public class JavaHttps
             String appSecret="d3358a4240b36874cd9ee7d5d9a1842a";
             JSONObject param=new JSONObject();
             param.put("codeId",123);
-            String host="";
             String timestamp= DateFormatUtils.format(new Date(),"yyyyMMddHHmmss");
             System.out.println("appkey="+appKey+"&appsecret="+appSecret+"&param="+param.toJSONString()+"&timestamp="+timestamp);
             String sign= MD5("appkey="+appKey+"&appsecret="+appSecret+"&param="+param.toJSONString()+"&timestamp="+timestamp);
-            String httpsURL = host+"?appkey="+appKey+"&sign="+sign+"&param="+ URLEncoder.encode(param
+            String httpsURL = "https://ad.99shiji" +
+                    ".com/ad/1/getADInfoByCodeId?appkey="+appKey+"&sign="+sign+"&param="+ URLEncoder.encode(param
                             .toJSONString(),"utf-8")+"&timestamp="+timestamp;
             System.out.println(httpsURL);
 //            URL myurl = new URL(httpsURL);
