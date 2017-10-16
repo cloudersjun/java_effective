@@ -25,13 +25,12 @@ public enum  JavaHttps {
     INSTANCE;
 
     public  String httpMethod(JSONObject param, String path,String type) throws Exception {
-        String appKey = "99shijithird2";
-        String appSecret = "d3358a4240b36874cd9ee7d5d9a1842a";
+        String appKey = "";
+        String appSecret = "";
         String timestamp = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
         System.out.println("appkey=" + appKey + "&appsecret=" + appSecret + "&param=" + param.toJSONString() + "&timestamp=" + timestamp);
         String sign = MD5("appkey=" + appKey + "&appsecret=" + appSecret + "&param=" + param.toJSONString() + "&timestamp=" + timestamp);
-        String httpsURL = "https://ad.99shiji" +
-                ".com/" + path + "?appkey=" + appKey + "&sign=" + sign + "&param=" + URLEncoder.encode(param
+        String httpsURL = "" + path + "?appkey=" + appKey + "&sign=" + sign + "&param=" + URLEncoder.encode(param
                 .toJSONString(), "utf-8") + "&timestamp=" + timestamp;
         System.out.println(httpsURL);
         HttpClient httpClient = new DefaultHttpClient();
