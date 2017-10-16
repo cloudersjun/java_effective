@@ -7,6 +7,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -19,46 +20,40 @@ import java.net.URLEncoder;
 import java.security.*;
 import java.util.Date;
 
-public class JavaHttps
-{
-        public static void main(String[] args)
-                throws Exception
-        {
-            String appKey="99shijithird2";
-            String appSecret="d3358a4240b36874cd9ee7d5d9a1842a";
-            JSONObject param=new JSONObject();
-            param.put("codeId",123);
-            String timestamp= DateFormatUtils.format(new Date(),"yyyyMMddHHmmss");
-            System.out.println("appkey="+appKey+"&appsecret="+appSecret+"&param="+param.toJSONString()+"&timestamp="+timestamp);
-            String sign= MD5("appkey="+appKey+"&appsecret="+appSecret+"&param="+param.toJSONString()+"&timestamp="+timestamp);
-            String httpsURL = "host?appkey="+appKey+"&sign="+sign+"&param="+ URLEncoder.encode(param
-                            .toJSONString(),"utf-8")+"&timestamp="+timestamp;
-            System.out.println(httpsURL);
-//            URL myurl = new URL(httpsURL);
-//            HttpsURLConnection con = (HttpsURLConnection)myurl.openConnection();
-//            con.setRequestProperty("Content-Type", "application/json");
-//            InputStream ins = con.getInputStream();
-//            InputStreamReader isr = new InputStreamReader(ins);
-//            BufferedReader in = new BufferedReader(isr);
-//            String inputLine;
-//            while ((inputLine = in.readLine()) != null)
-//            {
-//                System.out.println(inputLine);
-//            }
-//            in.close();
-            HttpGet httpGet = new HttpGet(httpsURL);
-            httpGet.addHeader("Content-Type","application/json");
-            HttpClient httpClient = new DefaultHttpClient();
-            try {
-                httpClient = wrapClient(httpClient);
-            } catch (KeyManagementException | NoSuchAlgorithmException e1) {
-                e1.printStackTrace();
-            }
-            HttpResponse response=httpClient.execute(httpGet);
-            System.out.println(EntityUtils.toString(response.getEntity()));
+public enum  JavaHttps {
 
+    INSTANCE;
+
+    public  String httpMethod(JSONObject param, String path,String type) throws Exception {
+        String appKey = "99shijithird2";
+        String appSecret = "d3358a4240b36874cd9ee7d5d9a1842a";
+        String timestamp = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
+        System.out.println("appkey=" + appKey + "&appsecret=" + appSecret + "&param=" + param.toJSONString() + "&timestamp=" + timestamp);
+        String sign = MD5("appkey=" + appKey + "&appsecret=" + appSecret + "&param=" + param.toJSONString() + "&timestamp=" + timestamp);
+        String httpsURL = "https://ad.99shiji" +
+                ".com/" + path + "?appkey=" + appKey + "&sign=" + sign + "&param=" + URLEncoder.encode(param
+                .toJSONString(), "utf-8") + "&timestamp=" + timestamp;
+        System.out.println(httpsURL);
+        HttpClient httpClient = new DefaultHttpClient();
+        try {
+            httpClient = wrapClient(httpClient);
+        } catch (KeyManagementException | NoSuchAlgorithmException e1) {
+            e1.printStackTrace();
         }
-    public static String MD5(String s) {
+        if (type.equals("post")){
+            HttpPost httpPost=new HttpPost(httpsURL);
+            httpPost.addHeader("Content-Type", "application/json");
+            HttpResponse response = httpClient.execute(httpPost);
+            return EntityUtils.toString(response.getEntity());
+        }else {
+            HttpGet httpGet = new HttpGet(httpsURL);
+            httpGet.addHeader("Content-Type", "application/json");
+            HttpResponse response = httpClient.execute(httpGet);
+            return EntityUtils.toString(response.getEntity());
+        }
+    }
+
+    public  String MD5(String s) {
         char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
         try {
             byte[] btInput = s.getBytes();
@@ -82,24 +77,27 @@ public class JavaHttps
             return null;
         }
     }
-    public static HttpClient wrapClient(HttpClient base) throws KeyManagementException, NoSuchAlgorithmException {
+
+    public  HttpClient wrapClient(HttpClient base) throws KeyManagementException, NoSuchAlgorithmException {
         SSLContext ctx = SSLContext.getInstance("TLS");
         X509TrustManager tm = new X509TrustManager() {
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                 return null;
             }
+
             @Override
             public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType)
                     throws java.security.cert.CertificateException {
 
             }
+
             @Override
             public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType)
                     throws java.security.cert.CertificateException {
 
             }
         };
-        ctx.init(null, new TrustManager[] { tm }, null);
+        ctx.init(null, new TrustManager[]{tm}, null);
         SSLSocketFactory ssf = new SSLSocketFactory(ctx);
         ssf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
         ClientConnectionManager ccm = base.getConnectionManager();
