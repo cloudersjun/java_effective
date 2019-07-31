@@ -17,7 +17,7 @@ import java.util.UUID;
  * Created by lenovo on 2017/6/15.
  */
 public class ElasticSearch {
-    public static  void main(String[] args) throws NoSuchAlgorithmException, Base64DecodingException, InvalidKeySpecException, NoSuchPaddingException, BadPaddingException, IllegalBlockSizeException, InvalidKeyException, IOException {
+    public static  void main(String[] args) {
         JSONArray array=new JSONArray();
         JSONObject js = new JSONObject();
         js.put("array",array);

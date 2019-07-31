@@ -1,6 +1,7 @@
-import io.netty.util.concurrent.Future;
-
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 /**
@@ -12,9 +13,9 @@ public class ThreadPool {
         TaskWithResult ta = new TaskWithResult("A");
         TaskWithResult tb = new TaskWithResult("B");
         TaskWithResult tc = new TaskWithResult("C");
-        java.util.concurrent.Future<String> fa = exe.submit(ta);
-        java.util.concurrent.Future<String> fb = exe.submit(tb);
-        java.util.concurrent.Future<String> fc = exe.submit(tc);
+        Future<String> fa = exe.submit(ta);
+        Future<String> fb = exe.submit(tb);
+        Future<String> fc = exe.submit(tc);
         try {
             while (true) {
                 if (fa.isDone()) {
@@ -27,12 +28,15 @@ public class ThreadPool {
                     return fc.get();
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return null;
-        } finally {
+        }
+        finally {
             exe.shutdown();
         }
     }
+
     private class TaskWithResult implements Callable<String> {
         private String type;
 
@@ -44,9 +48,11 @@ public class ThreadPool {
         public String call() throws Exception {
             if (type.equalsIgnoreCase("A")) {
                 return A();
-            } else if (type.equalsIgnoreCase("B")) {
+            }
+            else if (type.equalsIgnoreCase("B")) {
                 return B();
-            } else if (type.equalsIgnoreCase("C")) {
+            }
+            else if (type.equalsIgnoreCase("C")) {
                 return C();
             }
             return null;

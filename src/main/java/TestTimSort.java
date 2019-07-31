@@ -3,12 +3,7 @@ import java.util.*;
 public class TestTimSort {
     private static final int MIN_MERGE = 32;
     private static final Comparator<Object> NATURAL_ORDER =
-        new Comparator<Object>() {
-            @SuppressWarnings("unchecked")
-            public int compare(Object first, Object second) {
-                return ((Comparable<Object>)first).compareTo(second);
-            }
-        };
+            (first, second) -> ((Comparable<Object>)first).compareTo(second);
     
     private final int minRun;
 	private final List<Long> runs = new ArrayList<Long>();
