@@ -27,13 +27,10 @@ import groovy.lang.GroovyShell;
 public class Main {
     public static void main(String[] args) throws Exception {
         final Map<String, Object> vars = new HashMap<>();
-        vars.put("i", 100d);
-        vars.put("pi", -3.14d);
-        String exp = "i*+pi";
-        Binding binding = new Binding();
-        vars.forEach(binding::setVariable);
-        GroovyShell groovyShell = new GroovyShell(binding);
-        System.out.println(groovyShell.evaluate(exp));
+        vars.put("k_1", 100d);
+        vars.put("k_2", -3.14d);
+        String exp = "#k_1 * #k_2 + 4.5 ";
+        spEl(exp, vars);
     }
 
 
@@ -70,4 +67,12 @@ public class Main {
         Double result = (Double) expression.execute(map);
         System.out.println(result);
     }
+
+    public static void groovy(String exp, Map<String, Object> map) {
+        Binding binding = new Binding();
+        map.forEach(binding::setVariable);
+        GroovyShell groovyShell = new GroovyShell(binding);
+        System.out.println(groovyShell.evaluate(exp));
+    }
+
 }
